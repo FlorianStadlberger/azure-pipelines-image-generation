@@ -37,29 +37,18 @@ else
     exit 1
 }
 
-# Get available versions of Ruby
-# Tool cache Ruby Path
-$toolcacheRubyPath = 'C:\hostedtoolcache\windows\Ruby'
-
 # Default Ruby Version on Path
-$rubyVersionOnPath = (Get-Command -Name 'ruby').Path
-
-# Markdown Output
-$rubyVersionOutput = Get-ChildItem -Path $toolcacheRubyPath -Directory | Foreach-Object {
-	$rubyBinPath = Join-Path $_.FullName 'x64\bin'
-	$rubyVersion = Get-RubyVersion -rubyRootPath $rubyBinPath
-
-	if ($rubyVersionOnPath.Contains($rubyBinPath)) {
-		"#### {0} `r`n_Environment:_ `r`n* Location: {1} `r`n* PATH: contains the location of ruby.exe version {0}" -f $rubyVersion, $rubyBinPath
-	} else {
-		"#### {0} `r`n_Location:_ {1}" -f $rubyVersion, $rubyBinPath
-	}
-} | Out-String
+$rubyExeOnPath = (Get-Command -Name 'ruby').Path
+$rubyBinOnPath = Split-Path -Path $rubyExeOnPath
+$rubyVersionOnPath = Get-RubyVersion -rubyRootPath $rubyBinPath
 
 # Add details of available versions in Markdown
 $SoftwareName = "Ruby (x64)"
 $Description = @"
-{0}
-"@ -f $rubyVersionOutput
+#### $rubyVersionOnPath
+_Environment:_
+* Location:$rubyBinOnPath
+* PATH: contains the location of ruby.exe version $rubyVersionOnPath
+"@
 
 Add-SoftwareDetailsToMarkdown -SoftwareName $SoftwareName -DescriptionMarkdown $Description
