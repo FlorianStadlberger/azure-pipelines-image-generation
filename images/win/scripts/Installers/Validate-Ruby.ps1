@@ -47,7 +47,7 @@ $SoftwareName = "Ruby (x64)"
 $Description = @"
 #### $rubyVersionOnPath
 _Environment:_
-* Location:$rubyBinOnPath
+* Location: $rubyBinOnPath
 * PATH: contains the location of ruby.exe version $rubyVersionOnPath
 "@
 
